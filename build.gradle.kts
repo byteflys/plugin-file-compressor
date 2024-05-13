@@ -18,6 +18,7 @@ val _name = project.property("NAME").toString()
 val _group = project.property("GROUP").toString()
 val _id = project.property("ID").toString()
 val _version = project.property("VERSION").toString()
+val _description = project.property("DESCRIPTION").toString()
 val _website = project.property("WEBSITE").toString()
 val _vcsUrl = project.property("VCS").toString()
 val _tags = project.property("TAGS").toString().split(",")
@@ -28,6 +29,7 @@ tasks.withType<ShadowJar> {
     archiveBaseName.set("$_name-shadowed")
     archiveClassifier.set("")
     archiveVersion.set(_version)
+    isEnableRelocation = true
     dependencies {
         exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:1.9.23"))
         relocate("com.google", "shadow")
@@ -42,12 +44,12 @@ tasks.withType<ShadowJar> {
 // define a plugin
 gradlePlugin {
     plugins {
-        create("sample-plugin") {
+        create("FileCompressorPlugin") {
             displayName = _name
             group = _group
             id = _id
             version = _version
-            description = _name
+            description = _description
             website = _website
             vcsUrl = _vcsUrl
             tags = _tags
