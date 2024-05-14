@@ -44,7 +44,7 @@ tasks.withType<ShadowJar> {
 // define a plugin
 gradlePlugin {
     plugins {
-        create("FileCompressorPlugin") {
+        create(_id) {
             displayName = _name
             group = _group
             id = _id
@@ -65,11 +65,15 @@ publishing {
             name = "File"
             url = uri(layout.buildDirectory.dir("repository"))
         }
+        mavenLocal()
     }
 }
 
 // publish to file system repo
-// gradle publishPluginMavenPublicationToFileRepository
+// gradle publishAllPublicationsToFileRepository
+
+// publish to maven local
+// gradle publishAllPublicationsToMavenLocal
 
 // publish to gradle plugin central
 // gradle publishPlugins
