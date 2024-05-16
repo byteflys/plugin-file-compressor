@@ -11,6 +11,7 @@ plugins {
 dependencies {
     api("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
     api("com.google.code.gson:gson:2.10.1")
+    api("net.lingala.zip4j:zip4j:2.11.5")
 }
 
 // define variables
@@ -42,18 +43,18 @@ tasks.withType<ShadowJar> {
 // gradle shadowJar
 
 // define a plugin
+group = _group
+version = _version
 gradlePlugin {
     plugins {
-        create(_id) {
-            displayName = _name
-            group = _group
+        website = _website
+        vcsUrl = _vcsUrl
+        create("compressor") {
             id = _id
-            version = _version
-            description = _description
-            website = _website
-            vcsUrl = _vcsUrl
-            tags = _tags
             implementationClass = _pluginClass
+            displayName = _name
+            description = _description
+            tags = _tags
         }
     }
 }

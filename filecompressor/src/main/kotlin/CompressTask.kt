@@ -1,5 +1,6 @@
 package io.github.byteflys.plugin
 
+import LingalaZipFile
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -14,7 +15,7 @@ abstract class CompressTask : DefaultTask() {
     private val dir = project.layout.buildDirectory.dir("file-compress-temp").get()
 
     @OutputFile
-    var output = project.layout.buildDirectory.file("artifact.jar").get().asFile
+    var output = project.layout.buildDirectory.file("compressed.zip").get().asFile
 
     fun copyFile(src: String, path: String) {
         fileCopyTasks[src] = path
@@ -45,6 +46,9 @@ abstract class CompressTask : DefaultTask() {
             val dstFile = File(srcFile.parentFile, name)
             srcFile.renameTo(dstFile)
         }
-        dir.asFile.delete()
+        output.delete()
+        val zipFile = LingalaZipFile(output)
+        zipFile.addFolder(dir.asFile)
+//        dir.asFile.delete()
     }
 }
