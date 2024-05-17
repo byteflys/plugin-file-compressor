@@ -6,5 +6,5 @@ plugins {
 
 // gradle compress
 tasks.create("compress", CompressTask::class.java) {
-    copyDirectory(layout.buildDirectory.dir("libs").toString(), "")
+    copyDirectory(layout.buildDirectory.dir("libs").toString(), "./")
 }
