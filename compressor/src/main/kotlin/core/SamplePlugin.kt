@@ -1,4 +1,4 @@
-package io.github.byteflys.plugin
+package io.github.byteflys.compressor
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -35,7 +35,7 @@ abstract class SamplePlugin : Plugin<Project> {
         project.tasks.register("SampleTask", SampleTask::class.java) { task ->
             task.group = "Sample"
             task.description = "A Sample Task"
-            task.src = "./gradle"
+            task.src = "gradle"
             task.dst = "./gradleBak"
             task.file = task.dst
             println("SamplePlugin is applied")

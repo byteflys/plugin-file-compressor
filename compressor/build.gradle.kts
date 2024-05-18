@@ -23,7 +23,7 @@ val _description = project.property("DESCRIPTION").toString()
 val _website = project.property("WEBSITE").toString()
 val _vcsUrl = project.property("VCS").toString()
 val _tags = project.property("TAGS").toString().split(",")
-val _pluginClass = "io.github.byteflys.plugin.SamplePlugin"
+val _pluginClass = "io.github.byteflys.compressor.SamplePlugin"
 
 // configure shadow rule
 tasks.withType<ShadowJar> {

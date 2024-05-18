@@ -1,6 +1,6 @@
-package io.github.byteflys.plugin
+package io.github.byteflys.plugin.core
 
-import LingalaZipFile
+import module.LingalaZipFile
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction

@@ -1,1 +1,1 @@
-includeBuild("filecompressor")
+includeBuild("compressor")
