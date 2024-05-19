@@ -1,5 +1,6 @@
 package io.github.byteflys.plugin.core
 
+import gradle.CopyStrategy.INCLUDE_PARENT_DIRECTORY
 import module.LingalaZipFile
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.OutputFile
@@ -17,11 +18,20 @@ abstract class CompressTask : DefaultTask() {
     @OutputFile
     var output = project.layout.buildDirectory.file("compressed.zip").get().asFile
 
+    init {
+        // for execute without cache
+        outputs.upToDateWhen { false }
+    }
+
     fun copyFile(src: String, path: String) {
         fileCopyTasks[src] = path
     }
 
-    fun copyDirectory(src: String, path: String) {
+    fun copyDirectory(src: String, path: String, strategy: String = INCLUDE_PARENT_DIRECTORY) {
+        val path = if (strategy == INCLUDE_PARENT_DIRECTORY)
+            "$path/${File(src).name}"
+        else
+            path
         directoryCopyTasks[src] = path
     }
 
@@ -46,9 +56,12 @@ abstract class CompressTask : DefaultTask() {
             val dstFile = File(srcFile.parentFile, name)
             srcFile.renameTo(dstFile)
         }
+        // delete outdated zip file
         output.delete()
+        // compress zip file
         val zipFile = LingalaZipFile(output)
         zipFile.addFolder(dir.asFile)
-//        dir.asFile.delete()
+        // delete temp file
+        dir.asFile.deleteRecursively()
     }
 }
