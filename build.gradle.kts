@@ -30,6 +30,8 @@ tasks.create("compress", CompressTask::class.java) {
     val diskDir = path(ABSOLUTE, DIRECTORY, "/Users/easing/Dev/Gradle/gradle-8.7")
     copyDirectory(diskDir, "./")
     // include task artifact
-    val artifactFile = tasks.named("makeJar", Jar::class.java).get().path
+    val jarTask = tasks.named("makeJar", Jar::class.java)
+    val artifactFile = jarTask.get().outputs.files.first().absolutePath
     copyFile(artifactFile, "./")
+    dependsOn("makeJar")
 }

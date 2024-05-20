@@ -1,12 +1,15 @@
 ##### About this Project
 
-A compressor that allow packaging any file from anywhere into a zip/jar
+A compressor that allow packaging any file from anywhere into a Zip/Jar/Apk
 
 ##### Core Ability
 
-- Compress Any File into a Jar
-- Compress Any Directory into a Jar
-- Files and Directories Can Come from Project, Build, Disk, or Task Result
+- Support Zip/Jar/Apk Formats
+- Compress Any File into a Zip File
+- Compress Any Directory into a Zip File
+- Decompress and Modify Zip File
+- Rename Existed Files
+- File Sources Can Be Project, Build, Disk, or Task Artifact
 - Output Jar Can Be Used as Input of Other Gradle Tasks
 - Output of Other Gradle Tasks Can Be Used as Input of Compress Task
 - Customized Output Path and Format
