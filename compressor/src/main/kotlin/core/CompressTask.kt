@@ -5,7 +5,7 @@ import gradle.CopyStrategy.INCLUDE_PARENT_DIRECTORY
 import gradle.dirPath
 import module.LingalaZipFile
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import kotlin.io.path.Path
@@ -16,13 +16,15 @@ abstract class CompressTask : DefaultTask() {
     private val directoryCopyTasks = LinkedHashMap<String, String>()
     private val fileRenameTasks = LinkedHashMap<String, String>()
 
-    private val dir = project.layout.buildDirectory.dir("file-compress-temp").get()
+    private val tempZipFolder = project.layout.buildDirectory.dir("file-compress-temp").get()
 
-    @OutputFile
-    private lateinit var output: File
-
+    @Input
     var zipPath = project.layout.buildDirectory.dirPath()
+
+    @Input
     var zipName = "compressed"
+
+    @Input
     var zipFormat = "zip"
 
     init {
@@ -50,35 +52,39 @@ abstract class CompressTask : DefaultTask() {
         fileRenameTasks[path] = name
     }
 
+    fun tempZipDir() = tempZipFolder
+
+    fun outputZipFile() = File("$zipPath/$zipName.$zipFormat")
+
     @TaskAction
-    fun action() {
-        // create output file
-        output = File("$zipPath/$zipName.$zipFormat")
+    fun execute() {
         // include file
         fileCopyTasks.forEach { (src, path) ->
             val srcFile = File(src)
-            val dstFile = dir.file(path).asFile
+            val dstFile = tempZipFolder.file(path).asFile
             srcFile.copyTo(dstFile, true)
         }
         directoryCopyTasks.forEach { (src, path) ->
             val srcFile = File(src)
-            val dstFile = dir.dir(path).asFile
+            val dstFile = tempZipFolder.dir(path).asFile
             srcFile.copyRecursively(dstFile, true)
         }
         fileRenameTasks.forEach { (path, name) ->
-            val srcFile = dir.dir(path).asFile
+            val srcFile = tempZipFolder.dir(path).asFile
             val dstFile = File(srcFile.parentFile, name)
             srcFile.renameTo(dstFile)
         }
+        // create output file
+        val outputZipFile = outputZipFile()
         // delete outdated zip file
-        output.delete()
+        outputZipFile.delete()
         // rename zip folder name
-        val renamedFile = Path(dir.asFile.parentFile.absolutePath, zipName).toFile()
-        dir.asFile.renameTo(renamedFile)
+        val zipFolder = Path(tempZipFolder.asFile.parentFile.absolutePath, zipName).toFile()
+        tempZipFolder.asFile.renameTo(zipFolder)
         // compress zip file
-        val zipFile = LingalaZipFile(output)
-        zipFile.addFolder(dir.asFile)
+        val zipFile = LingalaZipFile(outputZipFile)
+        zipFile.addFolder(zipFolder)
         // delete zip folder
-        renamedFile.deleteRecursively()
+        zipFolder.deleteRecursively()
     }
 }

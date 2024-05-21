@@ -4,6 +4,7 @@ import gradle.PathType.ABSOLUTE
 import gradle.PathType.BUILD
 import gradle.PathType.ROOT_BUILD
 import gradle.PathType.ROOT_PROJECT
+import gradle.filePath
 import gradle.path
 import io.github.byteflys.plugin.core.CompressTask
 
@@ -31,7 +32,13 @@ tasks.create("compress", CompressTask::class.java) {
     copyDirectory(diskDir, "./")
     // include task artifact
     val jarTask = tasks.named("makeJar", Jar::class.java)
-    val artifactFile = jarTask.get().outputs.files.first().absolutePath
+    val artifactFile = jarTask.get().archiveFile.filePath()
     copyFile(artifactFile, "./")
     dependsOn("makeJar")
+    // rename artifact name
+    val originFile = tempZipDir().file("makeJar.jar").filePath()
+    rename(originFile, "artifact-make-jar.jar")
+    // set task output
+    val outputFile = outputZipFile()
+    outputs.file(outputFile)
 }
