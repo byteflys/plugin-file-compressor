@@ -1,2 +1,2 @@
-- include task output
-
+- inject dsl object
+- finish flag ext

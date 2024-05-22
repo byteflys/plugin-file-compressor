@@ -1,10 +1,14 @@
 package io.github.byteflys.plugin.core
 
-import gradle.CopyStrategy.COPY_TO_DIRECTORY
-import gradle.CopyStrategy.INCLUDE_PARENT_DIRECTORY
+import gradle.FileFlags.COPY_TO_DIRECTORY
+import gradle.FileFlags.INCLUDE_PARENT_DIRECTORY
+import gradle.FileFlags.IS_DIRECTORY
+import gradle.FileFlags.IS_FILE
+import gradle.containFlag
 import gradle.dirPath
 import module.LingalaZipFile
 import org.gradle.api.DefaultTask
+import org.gradle.api.artifacts.PublishArtifact
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -32,20 +36,34 @@ abstract class CompressTask : DefaultTask() {
         outputs.upToDateWhen { false }
     }
 
-    fun copyFile(src: String, path: String, strategy: String = COPY_TO_DIRECTORY) {
-        val path = if (strategy == COPY_TO_DIRECTORY)
+    fun copyFile(src: String, path: String, flags: Int = COPY_TO_DIRECTORY) {
+        val copyToDirectory = flags.containFlag(COPY_TO_DIRECTORY)
+        val path = if (copyToDirectory)
             "$path/${File(src).name}"
         else
             path
         fileCopyTasks[src] = path
     }
 
-    fun copyDirectory(src: String, path: String, strategy: String = INCLUDE_PARENT_DIRECTORY) {
-        val path = if (strategy == INCLUDE_PARENT_DIRECTORY)
+    fun copyDirectory(src: String, path: String, flags: Int = INCLUDE_PARENT_DIRECTORY) {
+        val includeParentDirectory = flags.containFlag(INCLUDE_PARENT_DIRECTORY)
+        val path = if (includeParentDirectory)
             "$path/${File(src).name}"
         else
             path
         directoryCopyTasks[src] = path
+    }
+
+    fun copyArtifact(
+        artifact: PublishArtifact,
+        path: String,
+        flags: Int = IS_FILE or COPY_TO_DIRECTORY or INCLUDE_PARENT_DIRECTORY
+    ) {
+        val isDirectory = flags.containFlag(IS_DIRECTORY)
+        if (isDirectory)
+            copyDirectory(artifact.file.absolutePath, path, flags)
+        else
+            copyFile(artifact.file.absolutePath, path, flags)
     }
 
     fun rename(path: String, name: String) {
