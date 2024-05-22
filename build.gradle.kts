@@ -1,5 +1,6 @@
 import gradle.FileFlags.COPY_TO_DIRECTORY
 import gradle.FileFlags.INCLUDE_PARENT_DIRECTORY
+import gradle.FileFlags.IS_DIRECTORY
 import gradle.FileFlags.IS_FILE
 import gradle.FileType.DIRECTORY
 import gradle.FileType.FILE
@@ -57,7 +58,7 @@ tasks.create("compress", CompressTask::class.java) {
     dependsOn("makeJar")
     // include artifact
     copyArtifact(jarArtifact, jarArtifact.name)
-    copyArtifact(fileArtifact, fileArtifact.name, IS_FILE or COPY_TO_DIRECTORY or INCLUDE_PARENT_DIRECTORY)
+    copyArtifact(fileArtifact, fileArtifact.name, IS_DIRECTORY or COPY_TO_DIRECTORY or INCLUDE_PARENT_DIRECTORY)
     // rename resource
     val originFile = tempZipDir().file("makeJar.jar").filePath()
     rename(originFile, "make-jar-output.jar")
