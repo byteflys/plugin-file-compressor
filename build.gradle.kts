@@ -1,7 +1,7 @@
+import core.compress
 import gradle.FileFlags.COPY_TO_DIRECTORY
 import gradle.FileFlags.INCLUDE_PARENT_DIRECTORY
 import gradle.FileFlags.IS_DIRECTORY
-import gradle.FileFlags.IS_FILE
 import gradle.FileType.DIRECTORY
 import gradle.FileType.FILE
 import gradle.PathType.ABSOLUTE
@@ -10,7 +10,6 @@ import gradle.PathType.ROOT_BUILD
 import gradle.PathType.ROOT_PROJECT
 import gradle.filePath
 import gradle.path
-import io.github.byteflys.plugin.core.CompressTask
 
 plugins {
     id("io.github.byteflys.compressor")
@@ -36,8 +35,7 @@ val fileArtifact = artifacts.add("artifacts", File("/Users/easing/Dev/Gradle/gra
     name = "fileArtifact"
 }
 
-// gradle compress
-tasks.create("compress", CompressTask::class.java) {
+compressor {
     // specify export path
     zipPath = path(BUILD, DIRECTORY, "./")
     zipName = "compressed"
@@ -66,3 +64,6 @@ tasks.create("compress", CompressTask::class.java) {
     val outputFile = outputZipFile()
     outputs.file(outputFile)
 }
+
+// instant execute
+compress()
