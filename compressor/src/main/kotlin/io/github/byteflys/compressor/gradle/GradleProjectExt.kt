@@ -1,4 +1,4 @@
-package gradle
+package io.github.byteflys.compressor.gradle
 
 import org.gradle.api.Project
 

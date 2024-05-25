@@ -1,4 +1,4 @@
-package core
+package io.github.byteflys.compressor.core
 
 object CompressorValues {
 

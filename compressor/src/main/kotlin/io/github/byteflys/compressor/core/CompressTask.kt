@@ -1,12 +1,12 @@
-package io.github.byteflys.plugin.core
+package io.github.byteflys.compressor.core
 
-import gradle.FileFlags.COPY_TO_DIRECTORY
-import gradle.FileFlags.INCLUDE_PARENT_DIRECTORY
-import gradle.FileFlags.IS_DIRECTORY
-import gradle.FileFlags.IS_FILE
-import gradle.containFlag
-import gradle.dirPath
-import module.LingalaZipFile
+import io.github.byteflys.compressor.gradle.FileFlags.COPY_TO_DIRECTORY
+import io.github.byteflys.compressor.gradle.FileFlags.INCLUDE_PARENT_DIRECTORY
+import io.github.byteflys.compressor.gradle.FileFlags.IS_DIRECTORY
+import io.github.byteflys.compressor.gradle.FileFlags.IS_FILE
+import io.github.byteflys.compressor.gradle.containFlag
+import io.github.byteflys.compressor.gradle.dirPath
+import io.github.byteflys.compressor.module.LingalaZipFile
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.PublishArtifact
 import org.gradle.api.tasks.Input
@@ -75,7 +75,7 @@ abstract class CompressTask : DefaultTask() {
     fun outputZipFile() = File("$zipPath/$zipName.$zipFormat")
 
     @TaskAction
-    fun execute() {
+    open fun execute() {
         // include file
         fileCopyTasks.forEach { (src, path) ->
             val srcFile = File(src)

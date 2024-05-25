@@ -1,22 +1,23 @@
-import core.compress
-import gradle.FileFlags.COPY_TO_DIRECTORY
-import gradle.FileFlags.INCLUDE_PARENT_DIRECTORY
-import gradle.FileFlags.IS_DIRECTORY
-import gradle.FileType.DIRECTORY
-import gradle.FileType.FILE
-import gradle.PathType.ABSOLUTE
-import gradle.PathType.BUILD
-import gradle.PathType.ROOT_BUILD
-import gradle.PathType.ROOT_PROJECT
-import gradle.filePath
-import gradle.path
+import io.github.byteflys.compressor.core.ExecutableJar
+import io.github.byteflys.compressor.core.executeTask
+import io.github.byteflys.compressor.gradle.FileFlags.COPY_TO_DIRECTORY
+import io.github.byteflys.compressor.gradle.FileFlags.INCLUDE_PARENT_DIRECTORY
+import io.github.byteflys.compressor.gradle.FileFlags.IS_DIRECTORY
+import io.github.byteflys.compressor.gradle.FileType.DIRECTORY
+import io.github.byteflys.compressor.gradle.FileType.FILE
+import io.github.byteflys.compressor.gradle.PathType.ABSOLUTE
+import io.github.byteflys.compressor.gradle.PathType.BUILD
+import io.github.byteflys.compressor.gradle.PathType.ROOT_BUILD
+import io.github.byteflys.compressor.gradle.PathType.ROOT_PROJECT
+import io.github.byteflys.compressor.gradle.filePath
+import io.github.byteflys.compressor.gradle.path
 
 plugins {
     id("io.github.byteflys.compressor")
 }
 
 // create jar
-val makeJarTask = tasks.create("makeJar", Jar::class.java) {
+val makeJarTask = tasks.create("makeJar", ExecutableJar::class.java) {
     from(path(ROOT_PROJECT, DIRECTORY, "compressor/src"))
     archiveBaseName = "makeJar"
     destinationDirectory = File(path(ROOT_BUILD, DIRECTORY, "makeJar"))
@@ -66,4 +67,5 @@ compressor {
 }
 
 // instant execute
-compress()
+executeTask("makeJar")
+executeTask("compress")

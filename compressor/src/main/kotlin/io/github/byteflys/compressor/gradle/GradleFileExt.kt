@@ -1,12 +1,12 @@
-package gradle
+package io.github.byteflys.compressor.gradle
 
-import gradle.FileType.DIRECTORY
-import gradle.FileType.FILE
-import gradle.PathType.ABSOLUTE
-import gradle.PathType.BUILD
-import gradle.PathType.PROJECT
-import gradle.PathType.ROOT_BUILD
-import gradle.PathType.ROOT_PROJECT
+import io.github.byteflys.compressor.gradle.FileType.DIRECTORY
+import io.github.byteflys.compressor.gradle.FileType.FILE
+import io.github.byteflys.compressor.gradle.PathType.ABSOLUTE
+import io.github.byteflys.compressor.gradle.PathType.BUILD
+import io.github.byteflys.compressor.gradle.PathType.PROJECT
+import io.github.byteflys.compressor.gradle.PathType.ROOT_BUILD
+import io.github.byteflys.compressor.gradle.PathType.ROOT_PROJECT
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
@@ -19,6 +19,14 @@ fun Directory.dirPath() = asFile.absolutePath
 fun Provider<RegularFile>.filePath() = get().filePath()
 
 fun Provider<Directory>.dirPath() = get().dirPath()
+
+fun Provider<RegularFile>.makeDir() {
+    val file = get().asFile
+    if (file.isDirectory)
+        file.mkdirs()
+    else
+        file.parentFile.mkdirs()
+}
 
 fun Project.filePath(pathType: String, relativePath: String) = when (pathType) {
     PROJECT -> layout.projectDirectory.file(relativePath).filePath()

@@ -23,14 +23,13 @@ val _description = project.property("DESCRIPTION").toString()
 val _website = project.property("WEBSITE").toString()
 val _vcsUrl = project.property("VCS").toString()
 val _tags = project.property("TAGS").toString().split(",")
-val _pluginClass = "io.github.byteflys.compressor.CompressPlugin"
+val _pluginClass = "io.github.byteflys.compressor.core.CompressPlugin"
 
 // configure shadow rule
 tasks.withType<ShadowJar> {
     archiveBaseName.set("$_name-shadowed")
     archiveClassifier.set("")
     archiveVersion.set(_version)
-    isEnableRelocation = true
     dependencies {
         exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:1.9.23"))
         relocate("com.google", "shadow")

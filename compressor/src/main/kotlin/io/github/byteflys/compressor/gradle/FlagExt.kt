@@ -1,4 +1,4 @@
-package gradle
+package io.github.byteflys.compressor.gradle
 
 fun Int.containFlag(flag: Int) = and(flag) > 0
 
