@@ -31,7 +31,7 @@ configurations {
 val jarArtifact = artifacts.add("artifacts", makeJarTask) {
     name = "jarArtifact"
 }
-val fileArtifact = artifacts.add("artifacts", File("/Users/easing/Dev/Gradle/gradle-8.6")) {
+val fileArtifact = artifacts.add("artifacts", File("/home/easing/Dev/Gradle/gradle-8.6")) {
     name = "fileArtifact"
 }
 
@@ -47,7 +47,7 @@ compressor {
     val buildDir = path(BUILD, FILE, "libs/compressor-3.0.4-main.jar")
     copyDirectory(buildDir, "./")
     // include disk files
-    val diskDir = path(ABSOLUTE, DIRECTORY, "/Users/easing/Dev/Gradle/gradle-8.7")
+    val diskDir = path(ABSOLUTE, DIRECTORY, "/home/easing/Dev/Gradle/gradle-8.7")
     copyDirectory(diskDir, "./")
     // include task output
     val jarTask = tasks.named("makeJar", Jar::class.java)

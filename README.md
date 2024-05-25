@@ -131,7 +131,7 @@ compressor {
 
 #### 3. Instant Execution
 
-If you donot wanna to execute task by command line manually
+If you don't want to execute task by command line manually
 
 Just call the compress api, then task will automatically execute when script is loaded
 
@@ -142,10 +142,91 @@ compress()
 
 #### 4. Include Project Files
 
-Package files from project dir into zip file
+Package files from project dir
 
 **_build.gradle.kts_**
 ```kotlin
-compress()
+compressor {
+    val gradleDir = path(ROOT_PROJECT, DIRECTORY, "gradle")
+    copyDirectory(gradleDir, "./")
+}
 ```
 
+#### 5. Include Build Files
+
+Package files from project build dir
+
+**_build.gradle.kts_**
+```kotlin
+compressor {
+    val buildDir = path(BUILD, FILE, "libs/compressor-3.0.4-main.jar")
+    copyDirectory(buildDir, "./")
+}
+```
+
+#### 6. Include Disk Files
+
+Package files from disk dir
+
+**_build.gradle.kts_**
+```kotlin
+compressor {
+    val diskDir = path(ABSOLUTE, DIRECTORY, "/home/easing/Dev/Gradle/gradle-8.7")
+    copyDirectory(diskDir, "./")
+}
+```
+
+#### 7. Include Task Output
+
+Package generated files of other task
+
+**_build.gradle.kts_**
+```kotlin
+val makeJarTask = tasks.create("makeJar", Jar::class.java) {
+    from(path(ROOT_PROJECT, DIRECTORY, "compressor/src"))
+    archiveBaseName = "makeJar"
+    destinationDirectory = File(path(ROOT_BUILD, DIRECTORY, "makeJar"))
+}
+
+compressor {
+    val jarTask = tasks.named("makeJar", Jar::class.java)
+    val taskOutput = jarTask.get().archiveFile.filePath()
+    copyFile(taskOutput, "./")
+    dependsOn("makeJar")
+}
+```
+
+#### 8. Include Artifact
+
+Package artifact defined by script or other plugin
+
+**_build.gradle.kts_**
+```kotlin
+configurations {
+    create("artifacts")
+}
+
+val jarArtifact = artifacts.add("artifacts", makeJarTask) {
+    name = "jarArtifact"
+}
+val fileArtifact = artifacts.add("artifacts", File("/home/easing/Dev/Gradle/gradle-8.6")) {
+    name = "fileArtifact"
+}
+
+compressor {
+    copyArtifact(jarArtifact, jarArtifact.name)
+    copyArtifact(fileArtifact, fileArtifact.name, IS_DIRECTORY or COPY_TO_DIRECTORY or INCLUDE_PARENT_DIRECTORY)
+}
+```
+
+#### 9. Rename Packaged Resource
+
+**_build.gradle.kts_**
+```kotlin
+compressor {
+    val originFile = tempZipDir().file("makeJar.jar").filePath()
+    rename(originFile, "make-jar-output.jar")
+}
+```
+
+# End
