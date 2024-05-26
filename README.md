@@ -318,3 +318,8 @@ executeTask("compress")
 ```
 
 # End
+
+We get a zip file like this
+
+![Compressed.zip](https://github.com/byteflys/plugin-file-compressor/assets/168255750/40dbdaab-0cac-45bd-864d-c8494aad824e)
+
