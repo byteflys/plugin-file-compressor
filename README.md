@@ -50,7 +50,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("io.github.byteflys:compressor-gradle-plugin:3.0.4")
+        classpath("io.github.byteflys:compressor:3.0.4")
     }
 }
 ```
